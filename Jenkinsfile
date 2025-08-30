@@ -7,32 +7,35 @@ pipeline {
             }
         }
         stage('Build') {
-            steps { 
+            steps {
+                // Make gradlew executable and run it with ./
                 sh 'chmod +x gradlew'
-                sh './gradlew build'}
+                sh './gradlew build'
+            }
         }
         stage('Test') {
-            steps { bat 'gradlew test'} 
+            steps {
+                // Use sh for Linux, not bat
+                sh './gradlew test'
+            }
         }
         stage('Deploy') {
-            steps { 
-                powershell 'java -jar build/libs/hello-world-java-V1.jar'
-            }           
-        }    
-}
-
-post {
+            steps {
+                // Use sh for Linux, not powershell
+                sh 'java -jar build/libs/hello-world-java-V1.jar'
+            }
+        }
+    }
+    post {
         always {
             echo 'Cleaning up workspace'
             deleteDir() // Clean up the workspace after the build
         }
         success {
             echo 'Build succeeded!!!'
-            // You could add notification steps here
         }
         failure {
             echo 'Build failed!'
-            // You could add notification steps here
         }
     }
 }
