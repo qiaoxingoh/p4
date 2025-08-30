@@ -8,9 +8,20 @@ pipeline {
         }
         stage('Build') {
             steps {
-                // FIRST make it executable, THEN run it with ./
+                // Debug: see what files exist
+                sh 'ls -la'
+                
+                // Debug: see if gradlew is there
+                sh 'ls -la gradlew'
+                
+                // Make it executable
                 sh 'chmod +x gradlew'
-                sh './gradlew build'  // 🔥 MUST have ./ prefix!
+                
+                // Debug: check permissions after chmod
+                sh 'ls -la gradlew'
+                
+                // Now run it with ./
+                sh './gradlew build'
             }
         }
         stage('Test') {
