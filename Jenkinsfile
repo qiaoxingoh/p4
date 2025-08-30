@@ -8,20 +8,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                // Make gradlew executable and run it with ./
+                // FIRST make it executable, THEN run it with ./
                 sh 'chmod +x gradlew'
-                sh './gradlew build'
+                sh './gradlew build'  // 🔥 MUST have ./ prefix!
             }
         }
         stage('Test') {
             steps {
-                // Use sh for Linux, not bat
-                sh './gradlew test'
+                sh './gradlew test'  // 🔥 MUST have ./ prefix!
             }
         }
         stage('Deploy') {
             steps {
-                // Use sh for Linux, not powershell
                 sh 'java -jar build/libs/hello-world-java-V1.jar'
             }
         }
@@ -29,7 +27,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace'
-            deleteDir() // Clean up the workspace after the build
+            deleteDir()
         }
         success {
             echo 'Build succeeded!!!'
